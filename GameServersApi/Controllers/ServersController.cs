@@ -17,17 +17,17 @@ namespace GameServers.Api.Controllers
             _serverService = serverService;
         }
 
-        [HttpGet("garrys-mod")]
-        public async Task<IActionResult> GetServers(int page = 1)
+        [HttpGet("{game}")]
+        public async Task<IActionResult> GetServers(string game, int page = 1)
         {
-            var servers = await _serverService.GetServers(page);
+            var servers = await _serverService.GetServers(game, page);
             return Ok(servers);
         }
         
-        [HttpGet("garrys-mod/all")]
-        public async Task<IActionResult> GetAllServers()
+        [HttpGet("{game}/all")]
+        public async Task<IActionResult> GetAllServers(string game)
         {
-            var servers = await _serverService.GetAllServersAsync();
+            var servers = await _serverService.GetAllServersAsync(game);
             return Ok(servers);
         }
     }

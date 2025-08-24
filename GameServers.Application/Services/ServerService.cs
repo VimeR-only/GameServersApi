@@ -13,15 +13,26 @@ namespace GameServers.Application.Services
         {
             _parser = parser;
         }
-        public async Task<List<GameServer>> GetServers(int page = 1)
+        public async Task<List<GameServer>> GetServers(string? game, int page = 1)
         {
+            if (game == null)
+            {
+                throw new ArgumentNullException(nameof(game));
+            }
             try
             {
                 // var stopwatch = new Stopwatch();
 
                 // stopwatch.Start();
 
-                var (content, statusCode) = await _parser.GetHtmlAsync($"https://tsarvar.com/en/servers/garrys-mod?page={page}");
+                var (content, statusCode) = await _parser.GetHtmlAsync($"https://tsarvar.com/en/servers/{game}?page={page}");
+                
+                if (statusCode != System.Net.HttpStatusCode.OK)
+                {
+                    Console.WriteLine($"[ERROR] Failed to load page {page}: Status code {statusCode}");
+
+                    return new List<GameServer>();
+                }
 
                 // stopwatch.Stop();
 
@@ -41,8 +52,13 @@ namespace GameServers.Application.Services
             }
         }
 
-        public async Task<List<GameServer>> GetAllServersAsync()
+        public async Task<List<GameServer>> GetAllServersAsync(string? game)
         {
+            if (game == null)
+            {
+                throw new ArgumentNullException(nameof(game));
+            }
+
             var servers = new List<GameServer>();
 
             int currentPage = 1;
@@ -60,7 +76,7 @@ namespace GameServers.Application.Services
                 {
                     int pageNumber = currentPage + i;
                     tasks.Add(_parser.GetHtmlAsync(
-                        $"https://tsarvar.com/en/servers/garrys-mod?page={pageNumber}"
+                        $"https://tsarvar.com/en/servers/{game}?page={pageNumber}"
                     ));
                 }
 
