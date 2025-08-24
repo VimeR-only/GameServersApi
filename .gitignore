@@ -1,0 +1,8 @@
+/.vs
+/GameServers.Application/bin
+/GameServers.Application/obj
+/GameServers.Domain/obj
+/GameServers.Infrastructure/bin
+/GameServers.Infrastructure/obj
+/GameServersApi/bin
+/GameServersApi/obj
