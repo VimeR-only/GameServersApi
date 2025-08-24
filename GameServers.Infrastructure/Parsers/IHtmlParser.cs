@@ -9,7 +9,7 @@ namespace GameServers.Infrastructure.Parsers
 {
     public interface IHtmlParser
     {
-        Task<string> GetHtmlAsync(string url);
-        List<GameServer> ParseServers(string html);
+        Task<(string, System.Net.HttpStatusCode)> GetHtmlAsync(string url);
+        List<GameServer> ParseServersList(string html);
     }
 }

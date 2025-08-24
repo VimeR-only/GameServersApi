@@ -13,16 +13,19 @@ namespace GameServers.Infrastructure.Parsers
             _httpClient = httpClient;
         }
 
-        public async Task<string> GetHtmlAsync(string url)
+
+
+        public async Task<(string, System.Net.HttpStatusCode)> GetHtmlAsync(string url)
         {
             var response = await _httpClient.GetAsync(url);
 
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadAsStringAsync();
+            var content = await response.Content.ReadAsStringAsync();
+            return (content, response.StatusCode);
         }
 
-        public List<GameServer> ParseServers(string html)
+        public List<GameServer> ParseServersList(string html)
         {
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
@@ -35,7 +38,7 @@ namespace GameServers.Infrastructure.Parsers
             foreach (var node in nodes)
             {
                 var nameNode = node.SelectSingleNode(".//span[contains(@class,'serversList-itemName')]/a");
-                string name = nameNode?.InnerText.Trim() ?? "Невідомо";
+                string name = nameNode?.InnerText.Trim();
 
                 var ipNode = node.SelectSingleNode(".//span[contains(@class,'serversList-itemAddressTblCText')]");
                 string ip = string.Empty;
@@ -58,10 +61,10 @@ namespace GameServers.Infrastructure.Parsers
                 int maxPlayers = Convert.ToInt32(maxPlayersNode?.InnerText);
 
                 var mapNode = node.SelectSingleNode(".//a[contains(@class,'serversList-itemMap')]");
-                string map = mapNode?.InnerText.Trim() ?? "Невідомо";
+                string map = mapNode?.InnerText.Trim();
 
-                //var countryNode = node.SelectSingleNode(".//a[contains(@class,'serversList-itemCountry')]");
-                //string country = countryNode?.InnerText.Trim() ?? "Невідомо";
+                var countryNode = node.SelectSingleNode(".//a[contains(@class,'serversList-itemCountry')]");
+                string country = countryNode?.InnerText.Trim();
 
                 if (nameNode != null && ipNode != null)
                 {
@@ -73,6 +76,7 @@ namespace GameServers.Infrastructure.Parsers
                         Map = map,
                         CurrentPlayers = curentPlayers,
                         MaxPlayers = maxPlayers,
+                        Country = country,
                     });
                 }
             }
