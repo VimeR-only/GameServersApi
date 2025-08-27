@@ -13,8 +13,6 @@ namespace GameServers.Infrastructure.Parsers
             _httpClient = httpClient;
         }
 
-
-
         public async Task<(string, System.Net.HttpStatusCode)> GetHtmlAsync(string url)
         {
             var response = await _httpClient.GetAsync(url);
@@ -83,5 +81,36 @@ namespace GameServers.Infrastructure.Parsers
 
             return servers;
         }
+
+        public List<Game> ParseGames(string html)
+        {
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
+            var games = new List<Game>();
+            var nodes = doc.DocumentNode.SelectNodes("//li[contains(@class, 'gamesList-item')]");
+
+            if (nodes == null) return games;
+
+            foreach (var node in nodes)
+            {
+                var linkNode = node.SelectSingleNode(".//a[contains(@class,'gamesList-itemImage')]");
+                if (linkNode == null) continue;
+
+                string title = linkNode.GetAttributeValue("title", "");
+                string href = linkNode.GetAttributeValue("href", "").Split("/")[3];
+
+                //Console.WriteLine($"Href: {href}, Title: {title}");
+
+                games.Add(new Game
+                {
+                    Name = title,
+                    Id = href
+                });
+            }
+
+            return games;
+        }
+
     }
 }

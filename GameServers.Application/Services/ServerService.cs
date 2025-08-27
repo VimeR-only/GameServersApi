@@ -1,6 +1,7 @@
 ﻿using GameServers.Application.Interfaces;
 using GameServers.Domain.Models;
 using GameServers.Infrastructure.Parsers;
+using System.Net;
 // using System.Diagnostics;
 
 namespace GameServers.Application.Services
@@ -27,7 +28,7 @@ namespace GameServers.Application.Services
 
                 var (content, statusCode) = await _parser.GetHtmlAsync($"https://tsarvar.com/en/servers/{game}?page={page}");
                 
-                if (statusCode != System.Net.HttpStatusCode.OK)
+                if (statusCode != HttpStatusCode.OK)
                 {
                     Console.WriteLine($"[ERROR] Failed to load page {page}: Status code {statusCode}");
 

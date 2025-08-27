@@ -11,5 +11,6 @@ namespace GameServers.Infrastructure.Parsers
     {
         Task<(string, System.Net.HttpStatusCode)> GetHtmlAsync(string url);
         List<GameServer> ParseServersList(string html);
+        List<Game> ParseGames(string html);
     }
 }

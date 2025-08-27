@@ -15,6 +15,7 @@ namespace GameServers.Api
             // Add services to the container.
             builder.Services.AddScoped<IHtmlParser, HtmlParser>();
             builder.Services.AddScoped<IServerService, ServerService>();
+            builder.Services.AddScoped<IGameService, GameService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
