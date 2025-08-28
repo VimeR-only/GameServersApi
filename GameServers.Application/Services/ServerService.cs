@@ -53,6 +53,21 @@ namespace GameServers.Application.Services
             }
         }
 
+        public async Task<GameServer> GetServerIpAsync(string game, string ip)
+        {
+
+            var (content, statusCode) = await _parser.GetHtmlAsync($"https://tsarvar.com/en/servers/{game}/{ip}");
+
+            if (statusCode != HttpStatusCode.OK)
+            {
+                Console.WriteLine($"[ERROR] Failed to load server of {ip}: Status code {statusCode}");
+
+                return new GameServer();
+            }
+
+            return _parser.ParseServerIp(content);
+        }
+
         public async Task<List<GameServer>> GetAllServersAsync(string? game)
         {
             if (game == null)

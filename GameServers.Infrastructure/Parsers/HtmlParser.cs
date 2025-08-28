@@ -1,6 +1,5 @@
 ﻿using GameServers.Domain.Models;
 using HtmlAgilityPack;
-using System;
 
 namespace GameServers.Infrastructure.Parsers
 {
@@ -82,6 +81,43 @@ namespace GameServers.Infrastructure.Parsers
             return servers;
         }
 
+        public GameServer ParseServerIp(string html)
+        {
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
+            var details = new GameServer();
+
+            var nameNode = doc.DocumentNode.SelectSingleNode("//span[contains(@class,'srvPage-titleName')]");
+            string name = nameNode?.InnerText.Trim();
+
+            var IpNode = doc.DocumentNode.SelectSingleNode("//span[contains(@class,'srvPage-addrText')]");
+            string fullIp = IpNode?.InnerText.Trim();
+
+            string ip = fullIp.Split(":")[0];
+            string port = fullIp.Split(":")[1];
+
+            var curNode = doc.DocumentNode.SelectSingleNode("//span[contains(@class,'srvPage-countCur')]");
+            var maxNode = doc.DocumentNode.SelectSingleNode("//span[contains(@class,'srvPage-countMax')]");
+
+            int curPlayers = Convert.ToInt32(curNode?.InnerText);
+            int maxPlayers = Convert.ToInt32(maxNode?.InnerText);
+
+            var mapNode = doc.DocumentNode.SelectSingleNode("//a[contains(@class,'srvPage-mapLink')]");
+            string map = mapNode?.InnerText.Trim();
+
+            Console.WriteLine(map + curPlayers + maxPlayers);
+
+            return new GameServer { 
+                Name = name,
+                Map = map,
+                Ip = ip,
+                Port = port,
+                CurrentPlayers = curPlayers,
+                MaxPlayers = maxPlayers,
+            };
+        }
+
         public List<Game> ParseGames(string html)
         {
             var doc = new HtmlDocument();
@@ -100,8 +136,6 @@ namespace GameServers.Infrastructure.Parsers
                 string title = linkNode.GetAttributeValue("title", "");
                 string href = linkNode.GetAttributeValue("href", "").Split("/")[3];
 
-                //Console.WriteLine($"Href: {href}, Title: {title}");
-
                 games.Add(new Game
                 {
                     Name = title,
@@ -111,6 +145,5 @@ namespace GameServers.Infrastructure.Parsers
 
             return games;
         }
-
     }
 }
