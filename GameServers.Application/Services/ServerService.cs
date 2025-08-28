@@ -2,7 +2,6 @@
 using GameServers.Domain.Models;
 using GameServers.Infrastructure.Parsers;
 using System.Net;
-// using System.Diagnostics;
 
 namespace GameServers.Application.Services
 {
@@ -16,16 +15,12 @@ namespace GameServers.Application.Services
         }
         public async Task<List<GameServer>> GetServers(string? game, int page = 1)
         {
-            if (game == null)
+            if (string.IsNullOrWhiteSpace(game))
             {
                 throw new ArgumentNullException(nameof(game));
             }
             try
             {
-                // var stopwatch = new Stopwatch();
-
-                // stopwatch.Start();
-
                 var (content, statusCode) = await _parser.GetHtmlAsync($"https://tsarvar.com/en/servers/{game}?page={page}");
                 
                 if (statusCode != HttpStatusCode.OK)
@@ -35,13 +30,6 @@ namespace GameServers.Application.Services
                     return new List<GameServer>();
                 }
 
-                // stopwatch.Stop();
-
-                // Console.WriteLine($"Request status: {statusCode}, Time: {stopwatch.Elapsed.TotalMilliseconds} ms");
-
-                // var list = _parser.ParseServers(content);
-
-                // Console.WriteLine($"[INFO] Page {list.Count} servers found.");
                 return _parser.ParseServersList(content);
 
             }
@@ -70,7 +58,7 @@ namespace GameServers.Application.Services
 
         public async Task<List<GameServer>> GetAllServersAsync(string? game)
         {
-            if (game == null)
+            if (string.IsNullOrWhiteSpace(game))
             {
                 throw new ArgumentNullException(nameof(game));
             }
@@ -79,10 +67,6 @@ namespace GameServers.Application.Services
 
             int currentPage = 1;
             int batchSize = 5;
-
-            // var stopwatch = new Stopwatch();
-
-            // stopwatch.Start();
 
             while (true)
             {
@@ -115,11 +99,6 @@ namespace GameServers.Application.Services
 
                 currentPage += batchSize;
             }
-
-            // stopwatch.Stop();
-
-            // Console.WriteLine($"[INFO] Total servers fetched: {servers.Count}");
-            // Console.WriteLine($"[INFO] Total time taken: {stopwatch.Elapsed.TotalSeconds} seconds");
 
             return servers;
         }
