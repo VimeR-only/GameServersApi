@@ -75,9 +75,8 @@ namespace GameServers.Application.Services
                 for (int i = 0; i < batchSize; i++)
                 {
                     int pageNumber = currentPage + i;
-                    tasks.Add(_parser.GetHtmlAsync(
-                        $"https://tsarvar.com/en/servers/{game}?page={pageNumber}"
-                    ));
+
+                    tasks.Add(_parser.GetHtmlAsync($"https://tsarvar.com/en/servers/{game}?page={pageNumber}"));
                 }
 
                 var results = await Task.WhenAll(tasks);
