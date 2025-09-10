@@ -10,7 +10,5 @@ namespace GameServers.Application.Interfaces
     public interface IGameService
     {
         Task<List<Game>> GetGames();
-
-
     }
 }

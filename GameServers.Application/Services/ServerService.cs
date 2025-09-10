@@ -13,7 +13,7 @@ namespace GameServers.Application.Services
         {
             _parser = parser;
         }
-        public async Task<List<GameServer>> GetServers(string? game, int page = 1)
+        public async Task<List<GameServer>> GetServersAsync(string? game, int page = 1)
         {
             if (string.IsNullOrWhiteSpace(game))
             {

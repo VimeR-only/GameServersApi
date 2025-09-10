@@ -20,7 +20,7 @@ namespace GameServers.Api.Controllers
         [HttpGet("{game}")]
         public async Task<IActionResult> GetServers(string game, int page = 1)
         {
-            var servers = await _serverService.GetServers(game, page);
+            var servers = await _serverService.GetServersAsync(game, page);
             return Ok(servers);
         }
         
