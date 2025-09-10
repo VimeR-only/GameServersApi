@@ -17,9 +17,11 @@ Note: This README does not cover every aspect of the project.
 
 - **Controllers** — API controllers that handle HTTP requests:
   - `ServersController` — fetches the list of servers for a game, all servers, or detailed info about a specific server.
+  - `GameController` — gets a list of all games on the site. Namely id and name
 
 - **Services** — services containing business logic:
   - `ServerService` — retrieves server and game data through the parser.
+  - `GameService` — gets game data through a parser.
 
 - **Parsers** — HTML parser:
   - `HtmlParser` implements `IHtmlParser` and extracts server and game data from HTML pages.
