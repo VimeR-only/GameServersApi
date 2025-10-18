@@ -1,4 +1,4 @@
-# Game Servers Api
+# Game Server Statistics API
 
 **Game Servers Api** is an ASP.NET Core Web API that provides information about game servers and games from [tsarvar.com](https://tsarvar.com). The API parses the website's HTML pages and returns structured data about servers and games via HTTP requests.
 
